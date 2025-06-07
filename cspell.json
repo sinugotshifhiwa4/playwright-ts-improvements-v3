@@ -1,0 +1,13 @@
+{
+  "version": "0.2",
+  "words": ["esbenp", "Sinugo", "Tshifhiwa", "ciphertext", "Logform", "viewports", "maxsize"],
+  "ignorePaths": [
+    "node_modules/**",
+    "logs/**",
+    "playwright-report/**",
+    "ortoni-report/**",
+    "src/testData/**"
+  ],
+  "allowCompoundWords": true,
+  "caseSensitive": false
+}
