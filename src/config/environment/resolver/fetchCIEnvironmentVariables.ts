@@ -10,6 +10,13 @@ export class FetchCIEnvironmentVariables {
     testPlatform: process.env.CI_TEST_PLATFORM!,
     testType: process.env.CI_TEST_TYPE!,
     apiBaseUrl: process.env.CI_API_BASE_URL!,
+    portalBaseUrl: process.env.CI_PORTAL_BASE_URL!,
+    adminUsername: process.env.CI_ADMIN_USERNAME!,
+    adminPassword: process.env.CI_ADMIN_PASSWORD!,
+    portalUsername: process.env.CI_PORTAL_USERNAME!,
+    portalPassword: process.env.CI_PORTAL_PASSWORD!,
+    tokenUsername: process.env.CI_TOKEN_USERNAME!,
+    tokenPassword: process.env.CI_TOKEN_PASSWORD!,
   };
 
   public async getAppVersion(): Promise<string> {
@@ -49,6 +56,51 @@ export class FetchCIEnvironmentVariables {
       'getApiBaseUrl',
       'Failed to get CI API base URL',
     );
+  }
+
+  /**
+   * Get portal base URL from CI environment variables
+   */
+  public async getPortalBaseUrl(): Promise<string> {
+    return this.getEnvironmentVariable(
+      () => this.ciEnvironmentVariables.portalBaseUrl,
+      'CI_PORTAL_BASE_URL',
+      'getPortalBaseUrl',
+      'Failed to get CI portal base URL',
+    );
+  }
+
+  public async getAdminCredentials(): Promise<Credentials> {
+    this.verifyCredentials({
+      username: this.ciEnvironmentVariables.adminUsername,
+      password: this.ciEnvironmentVariables.adminPassword,
+    });
+    return {
+      username: SanitizationConfig.sanitizeString(this.ciEnvironmentVariables.adminUsername),
+      password: SanitizationConfig.sanitizeString(this.ciEnvironmentVariables.adminPassword),
+    };
+  }
+
+  public async getPortalCredentials(): Promise<Credentials> {
+    this.verifyCredentials({
+      username: this.ciEnvironmentVariables.portalUsername,
+      password: this.ciEnvironmentVariables.portalPassword,
+    });
+    return {
+      username: SanitizationConfig.sanitizeString(this.ciEnvironmentVariables.portalUsername),
+      password: SanitizationConfig.sanitizeString(this.ciEnvironmentVariables.portalPassword),
+    };
+  }
+
+  public async getTokenCredentials(): Promise<Credentials> {
+    this.verifyCredentials({
+      username: this.ciEnvironmentVariables.tokenUsername,
+      password: this.ciEnvironmentVariables.tokenPassword,
+    });
+    return {
+      username: SanitizationConfig.sanitizeString(this.ciEnvironmentVariables.tokenUsername),
+      password: SanitizationConfig.sanitizeString(this.ciEnvironmentVariables.tokenPassword),
+    };
   }
 
   /**

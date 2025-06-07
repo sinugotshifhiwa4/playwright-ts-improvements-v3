@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 import { OrtoniReportConfig } from 'ortoni-report';
 import EnvironmentDetector from './src/config/environment/detector/detector';
 import path from 'path';
-import { TIMEOUTS } from './src/config/timeouts/timeout.config';
+import { TIMEOUTS, UI_TIMEOUTS } from './src/config/timeouts/timeout.config';
 import BrowserInitFlag from './src/config/browserInitFlag';
 
 const reportConfig: OrtoniReportConfig = {
@@ -82,8 +82,8 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: EnvironmentDetector.isCI() ? 'only-on-failure' : 'on',
     video: EnvironmentDetector.isCI() ? 'on' : 'retain-on-failure',
-    actionTimeout: TIMEOUTS.ui.action,
-    navigationTimeout: TIMEOUTS.ui.navigation,
+    actionTimeout: UI_TIMEOUTS.action,
+    navigationTimeout: UI_TIMEOUTS.navigation,
   },
 
   /* Configure projects for major browsers */

@@ -1,6 +1,8 @@
 import EnvironmentDetector from '../detector/detector';
 import { FetchCIEnvironmentVariables } from './fetchCIEnvironmentVariables';
 import { FetchLocalEnvironmentVariables } from './fetchLocalEnvironmentVariables';
+import { Credentials } from '../../types/auth/credentials.types';
+import { EnvironmentStage } from '../dotenv/types';
 import ErrorHandler from '../../../utils/errors/errorHandler';
 
 export class EnvironmentResolver {
@@ -48,6 +50,51 @@ export class EnvironmentResolver {
       () => this.FetchLocalEnvironmentVariables.getApiBaseUrl(),
       'getApiBaseUrl',
       'Failed to get API base URL',
+    );
+  }
+
+  public async getPortalBaseUrl(): Promise<string> {
+    return this.getEnvironmentValue(
+      () => this.fetchCIEnvironmentVariables.getPortalBaseUrl(),
+      () => this.FetchLocalEnvironmentVariables.getPortalBaseUrl(),
+      'getPortalBaseUrl',
+      'Failed to get portal base URL',
+    );
+  }
+
+  public async getAdminCredentials(
+    environmentForSecretKeyVariable: EnvironmentStage,
+  ): Promise<Credentials> {
+    return this.getEnvironmentValue(
+      () => this.fetchCIEnvironmentVariables.getAdminCredentials(),
+      () =>
+        this.FetchLocalEnvironmentVariables.getAdminCredentials(environmentForSecretKeyVariable),
+      'getAdminCredentials',
+      'Failed to get admin credentials',
+    );
+  }
+
+  public async getPortalCredentials(
+    environmentForSecretKeyVariable: EnvironmentStage,
+  ): Promise<Credentials> {
+    return this.getEnvironmentValue(
+      () => this.fetchCIEnvironmentVariables.getPortalCredentials(),
+      () =>
+        this.FetchLocalEnvironmentVariables.getPortalCredentials(environmentForSecretKeyVariable),
+      'getPortalCredentials',
+      'Failed to get portal credentials',
+    );
+  }
+
+  public async getTokenCredentials(
+    environmentForSecretKeyVariable: EnvironmentStage,
+  ): Promise<Credentials> {
+    return this.getEnvironmentValue(
+      () => this.fetchCIEnvironmentVariables.getTokenCredentials(),
+      () =>
+        this.FetchLocalEnvironmentVariables.getTokenCredentials(environmentForSecretKeyVariable),
+      'getTokenCredentials',
+      'Failed to get token credentials',
     );
   }
 

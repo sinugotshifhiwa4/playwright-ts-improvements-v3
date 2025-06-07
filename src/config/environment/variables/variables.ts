@@ -12,6 +12,8 @@ export default class EnvironmentVariables {
   // API
   public static readonly API_BASE_URL = process.env.API_BASE_URL!;
 
+  public static readonly PORTAL_BASE_URL = process.env.PORTAL_BASE_URL!;
+
   public static readonly ADMIN_USERNAME = process.env.ADMIN_USERNAME!;
   public static readonly ADMIN_PASSWORD = process.env.ADMIN_PASSWORD!;
 
@@ -22,6 +24,5 @@ export default class EnvironmentVariables {
   public static readonly TOKEN_PASSWORD = process.env.TOKEN_PASSWORD!;
 
   // Environment detection
-  public static readonly NODE_ENV = (process.env.NODE_ENV as EnvironmentStage) || 'dev';
   public static readonly ENV = (process.env.ENV as EnvironmentStage) || 'dev';
 }

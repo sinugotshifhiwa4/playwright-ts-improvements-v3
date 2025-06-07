@@ -2,6 +2,8 @@ import CryptoService from '../../../cryptography/services/encryptionService';
 import { Credentials } from '../../../config/types/auth/credentials.types';
 import SanitizationConfig from '../../../utils/sanitization/sanitizationConfig';
 import ENV from '../variables/variables';
+import { EnvironmentSecretKeys } from '../dotenv/constants';
+import { EnvironmentStage } from '../dotenv/types';
 import ErrorHandler from '../../../utils/errors/errorHandler';
 
 export class FetchLocalEnvironmentVariables {
@@ -46,6 +48,71 @@ export class FetchLocalEnvironmentVariables {
       'Failed to get local API base URL',
       false,
     );
+  }
+
+  /**
+   * Get portal base URL from local environment
+   */
+  public async getPortalBaseUrl(): Promise<string> {
+    return this.getEnvironmentVariable(
+      () => ENV.PORTAL_BASE_URL,
+      'PORTAL_BASE_URL',
+      'getPortalBaseUrl',
+      'Failed to get local portal base URL',
+      false,
+    );
+  }
+
+   /**
+   * Get admin credentials for specified environment
+   * @param environment - The environment ('dev', 'uat', or 'prod'). Defaults to 'dev'
+   */
+  public async getAdminCredentials(environmentForSecretKeyVariable: EnvironmentStage): Promise<Credentials> {
+    return this.decryptCredentials(
+      ENV.ADMIN_USERNAME,
+      ENV.ADMIN_PASSWORD,
+        this.getSecretKeyForEnvironment(environmentForSecretKeyVariable),
+    );
+  }
+
+  /**
+   * Get portal credentials for specified environment
+   * @param environment - The environment ('dev', 'uat', or 'prod'). Defaults to 'dev'
+   */
+  public async getPortalCredentials(environmentForSecretKeyVariable: EnvironmentStage): Promise<Credentials> {
+    return this.decryptCredentials(
+      ENV.PORTAL_USERNAME,
+      ENV.PORTAL_PASSWORD,
+      this.getSecretKeyForEnvironment(environmentForSecretKeyVariable),
+    );
+  }
+
+  /**
+   * Get token credentials for specified environment
+   * @param environment - The environment ('dev', 'uat', or 'prod'). Defaults to 'dev'
+   */
+  public async getTokenCredentials(environmentForSecretKeyVariable: EnvironmentStage): Promise<Credentials> {
+    return this.decryptCredentials(
+      ENV.TOKEN_USERNAME,
+      ENV.TOKEN_PASSWORD,
+      this.getSecretKeyForEnvironment(environmentForSecretKeyVariable),
+    );
+  }
+
+  /**
+   * Get the appropriate secret key for the given environment
+   */
+  private getSecretKeyForEnvironment(environment: EnvironmentStage): string {
+    switch (environment) {
+      case 'dev':
+        return EnvironmentSecretKeys.DEV;
+      case 'uat':
+        return EnvironmentSecretKeys.UAT;
+      case 'prod':
+        return EnvironmentSecretKeys.PROD;
+      default:
+        ErrorHandler.logAndThrow(`Failed to select secret key. Invalid environment: ${environment}. Must be 'dev', 'uat', or 'prod'`, 'getSecretKeyForEnvironment');
+    }
   }
 
   /**
