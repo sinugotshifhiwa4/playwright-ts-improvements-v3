@@ -1,7 +1,3 @@
-Here’s your fully **updated and polished** `README.md` for the **Playwright Test Automation Framework**, now aligned with your enhanced `scripts` section. It maintains consistency, professionalism, and structure, and clearly reflects all defined npm scripts and framework behavior.
-
----
-
 # 🚀 Playwright Test Automation Framework
 
 ## Introduction
